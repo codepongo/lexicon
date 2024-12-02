@@ -73,7 +73,6 @@ load_previous_data()
 with gr.Blocks(title = 'Recite') as interface:  
     word_input = gr.Textbox(label="Enter a word")  
     submit_button = gr.Button("Query")  
-    submit_button = gr.Button("Query123")  
     refresh_checkbox = gr.Checkbox(label="Show All")  
     output_display = gr.HTML()  # Output box for displaying the DataFrame    
 
