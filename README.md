@@ -17,5 +17,5 @@ http://recite.zuohaitao.com
 ## Feature
 * [x] 2024-12-01 lexicon can work
 * [x] add README.md
-* [ ] add authentication feature
-* [ ] improve page title
+* [x] add authentication feature
+* [x] improve page title

@@ -37,7 +37,6 @@ word_list = {}
 
 # Load previously saved data  
 def load_previous_data(filename='dictionary.json'):  
-    print('load_previous_data')  
     if not os.path.exists(filename):  
         with open(filename, 'w', encoding='utf-8') as f:  
             json.dump({}, f)  # Create an empty JSON object  
@@ -65,16 +64,16 @@ def query_meaning(word):
 
 # Function to get the complete DataFrame  
 def get_dataframe():  
-    print(word_list)  
     df = pd.DataFrame(list(word_list.items()), columns=["Word", "Meaning"])  
     return df  # Return the complete DataFrame, including Word and Meaning columns  
 
 load_previous_data()   
 
 # Create Gradio interface  
-with gr.Blocks() as interface:  
+with gr.Blocks(title = 'Recite') as interface:  
     word_input = gr.Textbox(label="Enter a word")  
     submit_button = gr.Button("Query")  
+    submit_button = gr.Button("Query123")  
     refresh_checkbox = gr.Checkbox(label="Show All")  
     output_display = gr.HTML()  # Output box for displaying the DataFrame    
 
@@ -94,4 +93,7 @@ with gr.Blocks() as interface:
 
 # Launch Gradio interface  
 if __name__ == "__main__":  
-    interface.launch()
+    interface.launch(server_name = '0.0.0.0',
+                    server_port = 8001,
+                    auth = ('zuohaitao', 'passworD000')
+                    )
