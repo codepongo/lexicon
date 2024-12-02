@@ -14,7 +14,8 @@ $ python dictionary_app.py
 
 http://recite.zuohaitao.com
 
-## TODO
-* [ ] add README.md
+## Feature
+* [x] 2024-12-01 lexicon can work
+* [x] add README.md
 * [ ] add authentication feature
 * [ ] improve page title
