@@ -19,3 +19,6 @@ http://recite.zuohaitao.com
 * [x] add README.md
 * [x] add authentication feature
 * [x] improve page title
+* [x] add favicon.ico
+* [x] Separate the query and save functionalities.
+* [x] add clear function

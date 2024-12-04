@@ -50,14 +50,18 @@ def load_previous_data(filename='dictionary.json'):
                 print("Failed to decode JSON; starting with an empty dictionary.")  
                 word_list.clear()  # Clear the dictionary to ensure it's empty   
 
+# Save the word
+def save():
+    # Save the updated dictionary to a JSON file  
+    with open("dictionary.json", "w", encoding='utf-8') as f:  
+        json.dump(word_list, f, ensure_ascii=False, indent=4)  # Save the dictionary in JSON format  
+ 
+
 # Query the meaning  
-def query_meaning(word):  
-    meaning = fetch_meaning(word)  
+def query_meaning(word):
+    meaning = fetch_meaning(word)
     if meaning:  
         word_list[word] = meaning  
-        # Save the updated dictionary to a JSON file  
-        with open("dictionary.json", "w", encoding='utf-8') as f:  
-            json.dump(word_list, f, ensure_ascii=False, indent=4)  # Save the dictionary in JSON format  
         return get_dataframe()  
     else:  
         return f"Meaning not found for '{word}'."  
@@ -70,15 +74,30 @@ def get_dataframe():
 load_previous_data()   
 
 # Create Gradio interface  
-with gr.Blocks(title = 'Recite') as interface:  
+with gr.Blocks(title = 'Recite'
+            ) as interface:
+    gr.HTML('''
+    <link rel="icon" type="image/png" href="favicon.ico" />
+    ''')
     word_input = gr.Textbox(label="Enter a word")  
-    submit_button = gr.Button("Query")  
+    query_button = gr.Button("Query")
+    clear_button = gr.Button('Clear')
+    save_button = gr.Button("Save")  
     refresh_checkbox = gr.Checkbox(label="Show All")  
     output_display = gr.HTML()  # Output box for displaying the DataFrame    
 
-    def on_submit(word):  
+    def on_save(word):  
+        save()
+        return get_dataframe().to_html(escape=False, index=False)  
+    
+    def on_query(word):  
         if word:  
             return query_meaning(word).to_html(escape=False, index=False)  # Return the complete DataFrame in HTML format  
+
+    def on_clear(word):
+        if word:  
+            del word_list[word]
+            return get_dataframe().to_html(escape=False, index=False)  # Return the complete DataFrame in HTML format  
 
     def on_refresh(should_refresh):  
         if should_refresh:  # If the checkbox is selected  
@@ -87,12 +106,15 @@ with gr.Blocks(title = 'Recite') as interface:
         return output_display.value  # If the checkbox is not selected, keep the current value   
 
     # Bind button events  
-    submit_button.click(on_submit, inputs=word_input, outputs=output_display)  
+    save_button.click(on_save, inputs=word_input, outputs=output_display)  
+    query_button.click(on_query, inputs=word_input, outputs=output_display) 
+    clear_button.click(on_clear, inputs=word_input, outputs=output_display) 
     refresh_checkbox.change(on_refresh, inputs=refresh_checkbox, outputs=output_display)  
 
 # Launch Gradio interface  
 if __name__ == "__main__":  
     interface.launch(server_name = '0.0.0.0',
                     server_port = 8001,
+                    favicon_path = 'favicon.ico',
                     auth = ('zuohaitao', 'passworD000')
                     )
