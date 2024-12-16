@@ -93,7 +93,7 @@ with gr.Blocks(title = 'Recite'
     <link rel="icon" type="image/png" href="favicon.ico" />
     ''')
     word_input = gr.Textbox(label="Enter a word")
-    word_output = gr.Label(label = "Translation")
+    word_output = gr.Textbox(interactive=False)
     query_button = gr.Button("Query")
     clear_button = gr.Button('Clear')
     save_button = gr.Button("Save")
@@ -102,7 +102,7 @@ with gr.Blocks(title = 'Recite'
 
     def on_save(word):
         save()
-        return get_dataframe().to_html(escape=False, index=False)
+        return True, get_dataframe().to_html(escape=False, index=False)
   
     def on_query(word):
         if word:
@@ -111,7 +111,7 @@ with gr.Blocks(title = 'Recite'
     def on_clear(word):
         if word:
             del word_list[word]
-            return "", "", get_dataframe().to_html(escape=False, index=False)  # Return the complete DataFrame in HTML format
+            return True, "", "", get_dataframe().to_html(escape=False, index=False)  # Return the complete DataFrame in HTML format
 
     def on_refresh(should_refresh):
         if should_refresh:  # If the checkbox is selected
@@ -121,14 +121,14 @@ with gr.Blocks(title = 'Recite'
 
     # Bind button events
     query_button.click(on_query, inputs=word_input, outputs=word_output) 
-    save_button.click(on_save, inputs=word_input, outputs=output_display)
-    clear_button.click(on_clear, inputs=word_input, outputs=(word_input, word_output, output_display)) 
+    save_button.click(on_save, inputs=word_input, outputs=(refresh_checkbox, output_display))
+    clear_button.click(on_clear, inputs=word_input, outputs=(refresh_checkbox, word_input, word_output, output_display)) 
     refresh_checkbox.change(on_refresh, inputs=refresh_checkbox, outputs=output_display)
 
 # Launch Gradio interface
 if __name__ == "__main__":
     interface.launch(server_name = '0.0.0.0',
                     server_port = server_port,
-                    #auth = ('zuohaitao', 'passworD000'),
+                    auth = ('zuohaitao', 'passworD000'),
                     favicon_path = 'favicon.ico'
                     )
