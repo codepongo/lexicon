@@ -75,7 +75,7 @@ def query_meaning(word):
     meaning = fetch_meaning(word)
     if meaning:
         word_list[word] = meaning
-        return get_dataframe()
+        return meaning
     else:
         return f"Meaning not found for '{word}'."
 
@@ -93,6 +93,7 @@ with gr.Blocks(title = 'Recite'
     <link rel="icon" type="image/png" href="favicon.ico" />
     ''')
     word_input = gr.Textbox(label="Enter a word")
+    word_output = gr.Label(label = "Translation")
     query_button = gr.Button("Query")
     clear_button = gr.Button('Clear')
     save_button = gr.Button("Save")
@@ -105,12 +106,12 @@ with gr.Blocks(title = 'Recite'
   
     def on_query(word):
         if word:
-            return query_meaning(word).to_html(escape=False, index=False)  # Return the complete DataFrame in HTML format
+            return query_meaning(word)
 
     def on_clear(word):
         if word:
             del word_list[word]
-            return get_dataframe().to_html(escape=False, index=False)  # Return the complete DataFrame in HTML format
+            return "", "", get_dataframe().to_html(escape=False, index=False)  # Return the complete DataFrame in HTML format
 
     def on_refresh(should_refresh):
         if should_refresh:  # If the checkbox is selected
@@ -119,9 +120,9 @@ with gr.Blocks(title = 'Recite'
         return output_display.value  # If the checkbox is not selected, keep the current value 
 
     # Bind button events
+    query_button.click(on_query, inputs=word_input, outputs=word_output) 
     save_button.click(on_save, inputs=word_input, outputs=output_display)
-    query_button.click(on_query, inputs=word_input, outputs=output_display) 
-    clear_button.click(on_clear, inputs=word_input, outputs=output_display) 
+    clear_button.click(on_clear, inputs=word_input, outputs=(word_input, word_output, output_display)) 
     refresh_checkbox.change(on_refresh, inputs=refresh_checkbox, outputs=output_display)
 
 # Launch Gradio interface
