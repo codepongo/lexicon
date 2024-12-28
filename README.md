@@ -22,5 +22,5 @@ http://recite.zuohaitao.com
 * [x] add favicon.ico
 * [x] Separate the query and save functionalities.
 * [x] add clear function
-* [ ] improve the word list UI
+* [x] improve the word list UI
 * [ ] add the pronunciation feature
