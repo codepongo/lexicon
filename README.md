@@ -23,4 +23,4 @@ http://recite.zuohaitao.com
 * [x] Separate the query and save functionalities.
 * [x] add clear function
 * [x] improve the word list UI
-* [ ] add the pronunciation feature
+* [x] add the pronunciation feature
