@@ -7,6 +7,9 @@ import gradio as gr
 
 server_port = 8001
 
+password = 'passworD000' if 'PASSWORD' not in os.environ else os.environ['PASSWORD'] 
+
+
 if len(sys.argv) > 1:
     try:
         server_port = int(sys.argv[1])
@@ -97,7 +100,7 @@ table th, table td {
 table th {
     background-color: #f2f2f2; /* Header background color */
 }
-""") as interface:
+""") as demo:
     gr.HTML('''
     <link rel="icon" type="image/png" href="favicon.ico" />
     ''')
@@ -135,8 +138,8 @@ table th {
 
 # Launch Gradio interface
 if __name__ == "__main__":
-    interface.launch(server_name = '0.0.0.0',
-                    server_port = server_port,
-                    auth = ('zuohaitao', 'passworD000'),
-                    favicon_path = 'favicon.ico'
-                    )
+    demo.launch(server_name = '0.0.0.0',
+                server_port = server_port,
+                auth = ('zuohaitao', password),
+                favicon_path = 'favicon.ico'
+                )
