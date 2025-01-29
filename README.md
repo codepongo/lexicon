@@ -25,4 +25,4 @@ http://recite.zuohaitao.com
 * [x] improve the word list UI
 * [x] add the pronunciation feature
 * [x] change the length of the word list to match the width of the interface
-* [] pop gr.Info() after the save action.
+* [x] pop gr.Info() after the save action.

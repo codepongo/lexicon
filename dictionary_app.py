@@ -157,6 +157,7 @@ table th {
 
     def on_save(word):
         save()
+        gr.Info(f"<b>{word}</b> is added.", duration=5) 
 
     def on_query(word):
         if word:
