@@ -152,7 +152,7 @@ table th {
 
 
     save_button = gr.Button("Save")
-    with gr.Accordion("Show All"):
+    with gr.Accordion("Show All", open=False):
         output_display = gr.HTML(padding=False, value=get_dataframe().to_html(escape=False, index=False))
 
     def on_save(word):
