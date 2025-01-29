@@ -126,6 +126,7 @@ load_previous_data()
 with gr.Blocks(title='Recite', css="""
 table {
     border-radius: 3px; /* Set border radius */
+    width: 100%;
 }
 table th, table td {
     border: 1px solid #ddd; /* Set border style */
