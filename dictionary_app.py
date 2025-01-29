@@ -152,12 +152,13 @@ table th {
 
 
     save_button = gr.Button("Save")
-    refresh_checkbox = gr.Checkbox(label="Show All", container=False)
-    output_display = gr.HTML(padding=False)
+    with gr.Accordion("Show All"):
+        output_display = gr.HTML(padding=False, value=get_dataframe().to_html(escape=False, index=False))
 
     def on_save(word):
         save()
-        gr.Info(f"<b>{word}</b> is added.", duration=5) 
+        gr.Info(f"<b>{word}</b> is added.", duration=5)
+        return get_dataframe().to_html(escape=False, index=False) 
 
     def on_query(word):
         if word:
@@ -166,20 +167,14 @@ table th {
     def on_clear(word):
         if word:
             del word_list[word]
-        return True, "", "", get_dataframe().to_html(escape=False, index=False)  # Return the complete DataFrame in HTML format
+        return "", "", get_dataframe().to_html(escape=False, index=False)  # Return the complete DataFrame in HTML format
 
-    def on_refresh(should_refresh):
-        if should_refresh:  # If the checkbox is selected
-            load_previous_data()  # Reload the data
-            return get_dataframe().to_html(escape=False, index=False)  # Return the updated DataFrame in HTML format
-        return output_display.value  # If the checkbox is not selected, keep the current value
 
     # Bind button events
     query_button.click(on_query, inputs=word_input,
                         outputs=[word_output, word_us_audio, word_uk_audio])
-    save_button.click(on_save, inputs=word_input)
-    clear_button.click(on_clear, inputs=word_input, outputs=(refresh_checkbox, word_input, word_output, output_display))
-    refresh_checkbox.change(on_refresh, inputs=refresh_checkbox, outputs=output_display)
+    save_button.click(on_save, inputs=word_input, outputs=output_display)
+    clear_button.click(on_clear, inputs=word_input, outputs=(word_input, word_output, output_display))
 
 # Launch Gradio interface
 if __name__ == "__main__":
