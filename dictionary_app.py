@@ -142,7 +142,7 @@ table th {
     ''')
     with gr.Row():
         word_input = gr.Textbox(placeholder="Enter a word", container=False, scale=8)
-        query_button = gr.Button("Query", scale=1)
+        query_button = gr.Button("Query", variant="primary", scale=1)
         clear_button = gr.Button('Clear', scale=1)
 
     word_output = gr.Textbox(show_label=False, interactive=False, container=False)
