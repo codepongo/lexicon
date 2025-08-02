@@ -13,7 +13,7 @@ ffmpy==0.4.0
 filelock==3.16.1
 fsspec==2024.10.0
 gradio==5.9.1
-gradio_client==1.5.0
+gradio_client==1.5.2
 h11==0.14.0
 httpcore==1.0.7
 httpx==0.28.0
@@ -34,13 +34,13 @@ pydantic_core==2.27.1
 pydub==0.25.1
 Pygments==2.18.0
 python-dateutil==2.9.0.post0
-python-multipart==0.0.12
+python-multipart==0.0.18
 pytz==2024.2
 PyYAML==6.0.2
 requests==2.32.3
 rich==13.9.4
 ruff==0.8.1
-safehttpx==0.1.1
+safehttpx==0.1.6
 semantic-version==2.10.0
 shellingham==1.5.4
 six==1.16.0
