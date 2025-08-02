@@ -5,9 +5,12 @@ import pandas as pd
 import requests
 import gradio as gr
 
+DEBUG=False
 server_port = 8001
 
 password = 'passworD000' if 'PASSWORD' not in os.environ else os.environ['PASSWORD']
+
+
 
 
 if len(sys.argv) > 1:
@@ -19,6 +22,9 @@ if len(sys.argv) > 1:
 sys.path.append(os.path.join(os.path.realpath('.'), 'deps'))
 
 audio_folder = os.path.join(os.path.realpath('.'), 'audio')
+
+if not os.path.exists(audio_folder):
+    os.makedirs(audio_folder, exist_ok=True)
 
 # Function to fetch the meaning of a word
 def fetch_meaning(html, word):
@@ -75,9 +81,16 @@ def fetch_content(word):
        return None  # Return None if unable to fetch the meaning
 
     http_body = response.text
+    if DEBUG:
+        with open('dict.bing.com.txt', 'w', encoding='utf-8') as f:
+            f.write(http_body)
+
     meaning = fetch_meaning(http_body, word)
+    print(meaning)
     us_mp3_url = fetch_audio(http_body, '<a id="bigaud_us" data-mp3link="', '"')
+    print(us_mp3_url)
     uk_mp3_url = fetch_audio(http_body, '<a id="bigaud_uk" class="bigaud linkBtn" data-mp3link="', '"')
+    print(uk_mp3_url)
     us_audio_file = download_audio(us_mp3_url, os.path.join(audio_folder, f"{word}_us.mp3"))
     uk_audio_file = download_audio(uk_mp3_url, os.path.join(audio_folder, f"{word}_uk.mp3"))
     return meaning, us_audio_file, uk_audio_file
