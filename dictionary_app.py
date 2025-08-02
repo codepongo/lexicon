@@ -8,10 +8,7 @@ import gradio as gr
 DEBUG=False
 server_port = 8001
 
-password = 'passworD000' if 'PASSWORD' not in os.environ else os.environ['PASSWORD']
-
-
-
+password = "asdfghjkl;'" if 'PASSWORD' not in os.environ else os.environ['PASSWORD']
 
 if len(sys.argv) > 1:
     try:
@@ -109,6 +106,8 @@ def load_previous_data(filename='dictionary.json'):
                 content = f.read()
                 if content:  # Only load if content is non-empty
                     word_list.update(json.loads(content))  # Safely load JSON
+                    if DEBUG:
+                        print(f"{word_list.keys()} in load_previous_data()")
             except json.JSONDecodeError:
                 print("Failed to decode JSON; starting with an empty dictionary.")
                 word_list.clear()  # Clear the dictionary to ensure it's empty
@@ -130,26 +129,36 @@ def query_meaning(word):
 
 # Get the complete DataFrame
 def get_dataframe():
+    if DEBUG:
+        print(f"{word_list.keys()} in get_dataframe()")
     df = pd.DataFrame(list(word_list.items()), columns=["Word", "Meaning"])
     return df  # Return the complete DataFrame, including Word and Meaning columns
 
-load_previous_data()
+
+def load():
+    if DEBUG:
+        print("load()")
+    load_previous_data()
+
 
 # Create Gradio interface
-with gr.Blocks(title='Recite', css="""
-table {
-    border-radius: 3px; /* Set border radius */
-    width: 100%;
-}
-table th, table td {
-    border: 1px solid #ddd; /* Set border style */
-    padding: 8px; /* Set cell padding */
-    text-align: left; /* Align text to the left */
-}
-table th {
-    background-color: #f2f2f2; /* Header background color */
-}
-""") as demo:
+with gr.Blocks(title='Recite',
+#css="""
+#table {
+#    border-radius: 3px; /* Set border radius */
+#    width: 100%;
+#}
+#table th, table td {
+#    border: 1px solid #ddd; /* Set border style */
+#    padding: 8px; /* Set cell padding */
+#    text-align: left; /* Align text to the left */
+#}
+#table th {
+#    background-color: #f2f2f2; /* Header background color */
+#}
+#"""
+) as demo:
+    demo.load(fn=load)
     gr.HTML('''
     <link rel="icon" type="image/png" href="favicon.ico" />
     ''')
@@ -165,8 +174,16 @@ table th {
 
 
     save_button = gr.Button("Save")
-    with gr.Accordion("Show All", open=False):
+    def expand_all():
+        if DEBUG:
+            print('expand_all()')
+        load_previous_data()
+        return get_dataframe().to_html(escape=False, index=False) 
+
+
+    with gr.Accordion("Show All", open=False) as accordion:
         output_display = gr.HTML(padding=False, value=get_dataframe().to_html(escape=False, index=False))
+        accordion.expand(fn=expand_all, outputs=output_display)
 
     def on_save(word):
         save()
@@ -183,6 +200,7 @@ table th {
         return "", "", get_dataframe().to_html(escape=False, index=False)  # Return the complete DataFrame in HTML format
 
 
+    word_input.submit(on_query, word_input, [word_output, word_us_audio, word_uk_audio])
     # Bind button events
     query_button.click(on_query, inputs=word_input,
                         outputs=[word_output, word_us_audio, word_uk_audio])
